@@ -1,0 +1,485 @@
+\documentclass[10pt, letterpaper]{article}
+
+% Packages:
+\usepackage[
+    ignoreheadfoot, % set margins without considering header and footer
+    top=2 cm, % seperation between body and page edge from the top
+    bottom=2 cm, % seperation between body and page edge from the bottom
+    left=2 cm, % seperation between body and page edge from the left
+    right=2 cm, % seperation between body and page edge from the right
+    footskip=1.0 cm, % seperation between body and footer
+    % showframe % for debugging 
+]{geometry} % for adjusting page geometry
+\usepackage{titlesec} % for customizing section titles
+\usepackage{tabularx} % for making tables with fixed width columns
+\usepackage{array} % tabularx requires this
+\usepackage[dvipsnames]{xcolor} % for coloring text
+\definecolor{primaryColor}{RGB}{0, 0, 0} % define primary color
+\usepackage{enumitem} % for customizing lists
+\usepackage{fontawesome5} % for using icons
+\usepackage{amsmath} % for math
+\usepackage{comment}
+\usepackage[
+    pdftitle={John Doe's CV},
+    pdfauthor={John Doe},
+    pdfcreator={LaTeX with RenderCV},
+    colorlinks=true,
+    urlcolor=primaryColor
+]{hyperref} % for links, metadata and bookmarks
+\usepackage[pscoord]{eso-pic} % for floating text on the page
+\usepackage{calc} % for calculating lengths
+\usepackage{bookmark} % for bookmarks
+\usepackage{lastpage} % for getting the total number of pages
+\usepackage{changepage} % for one column entries (adjustwidth environment)
+\usepackage{paracol} % for two and three column entries
+\usepackage{ifthen} % for conditional statements
+\usepackage{needspace} % for avoiding page brake right after the section title
+\usepackage{iftex} % check if engine is pdflatex, xetex or luatex
+
+% Ensure that generate pdf is machine readable/ATS parsable:
+\ifPDFTeX
+    \input{glyphtounicode}
+    \pdfgentounicode=1
+    \usepackage[T1]{fontenc}
+    \usepackage[utf8]{inputenc}
+    \usepackage{lmodern}
+\fi
+
+\usepackage{charter}
+
+% Some settings:
+\raggedright
+\AtBeginEnvironment{adjustwidth}{\partopsep0pt} % remove space before adjustwidth environment
+\pagestyle{empty} % no header or footer
+\setcounter{secnumdepth}{0} % no section numbering
+\setlength{\parindent}{0pt} % no indentation
+\setlength{\topskip}{0pt} % no top skip
+\setlength{\columnsep}{0.15cm} % set column seperation
+\pagenumbering{gobble} % no page numbering
+
+\titleformat{\section}{\needspace{4\baselineskip}\bfseries\large}{}{0pt}{}[\vspace{1pt}\titlerule]
+
+\titlespacing{\section}{
+    % left space:
+    -1pt
+}{
+    % top space:
+    0.3 cm
+}{
+    % bottom space:
+    0.2 cm
+} % section title spacing
+
+\renewcommand\labelitemi{$\vcenter{\hbox{\small$\bullet$}}$} % custom bullet points
+\newenvironment{highlights}{
+    \begin{itemize}[
+        topsep=0.10 cm,
+        parsep=0.10 cm,
+        partopsep=0pt,
+        itemsep=0pt,
+        leftmargin=0 cm + 10pt
+    ]
+}{
+    \end{itemize}
+} % new environment for highlights
+
+
+\newenvironment{highlightsforbulletentries}{
+    \begin{itemize}[
+        topsep=0.10 cm,
+        parsep=0.10 cm,
+        partopsep=0pt,
+        itemsep=0pt,
+        leftmargin=10pt
+    ]
+}{
+    \end{itemize}
+} % new environment for highlights for bullet entries
+
+\newenvironment{onecolentry}{
+    \begin{adjustwidth}{
+        0 cm + 0.00001 cm
+    }{
+        0 cm + 0.00001 cm
+    }
+}{
+    \end{adjustwidth}
+} % new environment for one column entries
+
+\newenvironment{twocolentry}[2][]{
+    \onecolentry
+    \def\secondColumn{#2}
+    \setcolumnwidth{\fill, 4.5 cm}
+    \begin{paracol}{2}
+}{
+    \switchcolumn \raggedleft \secondColumn
+    \end{paracol}
+    \endonecolentry
+} % new environment for two column entries
+
+\newenvironment{threecolentry}[3][]{
+    \onecolentry
+    \def\thirdColumn{#3}
+    \setcolumnwidth{, \fill, 4.5 cm}
+    \begin{paracol}{3}
+    {\raggedright #2} \switchcolumn
+}{
+    \switchcolumn \raggedleft \thirdColumn
+    \end{paracol}
+    \endonecolentry
+} % new environment for three column entries
+
+\newenvironment{header}{
+    \setlength{\topsep}{0pt}\par\kern\topsep\centering\linespread{1.5}
+}{
+    \par\kern\topsep
+} % new environment for the header
+
+\newcommand{\placelastupdatedtext}{% \placetextbox{<horizontal pos>}{<vertical pos>}{<stuff>}
+  \AddToShipoutPictureFG*{% Add <stuff> to current page foreground
+    \put(
+        \LenToUnit{\paperwidth-2 cm-0 cm+0.05cm},
+        \LenToUnit{\paperheight-1.0 cm}
+    ){\vtop{{\null}\makebox[0pt][c]{
+        \small\color{gray}\textit{Last updated in September 2024}\hspace{\widthof{Last updated in September 2024}}
+    }}}%
+  }%
+}%
+
+% save the original href command in a new command:
+\let\hrefWithoutArrow\href
+
+% new command for external links:
+
+
+\begin{document}
+    \newcommand{\AND}{\unskip
+        \cleaders\copy\ANDbox\hskip\wd\ANDbox
+        \ignorespaces
+    }
+    \newsavebox\ANDbox
+    \sbox\ANDbox{$|$}
+
+    \begin{header}
+        \fontsize{25 pt}{25 pt}\selectfont Sabbir Ahmed
+
+        \vspace{5 pt}
+
+        \normalsize
+        \mbox{Matuail, Dhaka}%
+        \kern 5.0 pt%
+        \AND%
+        \kern 5.0 pt%
+        \mbox{\hrefWithoutArrow{mailto:msa29.cse@gmail.com}{msa29.cse@gmail.com}}%
+        \kern 5.0 pt%
+        \AND%
+        \kern 5.0 pt%
+        \mbox{\hrefWithoutArrow{tel:+8801990607209}{+880 1990-607209}}%
+        \kern 5.0 pt%
+        \AND%
+        \kern 5.0 pt%
+        \mbox{\hrefWithoutArrow{https://sabbir.uvoystore.com/}{Portfolio Website}}%
+        \kern 5.0 pt%
+        \AND%
+        \kern 5.0 pt%
+        \mbox{\hrefWithoutArrow{https://www.linkedin.com/in/msabbir-ahmed/}{linkedin.com/msabbirahmed
+        }}%
+        \kern 5.0 pt%
+        \AND%
+        \kern 5.0 pt%
+        \mbox{\hrefWithoutArrow{https://github.com/sabbirahmed404}{github.com/sabbirahmed404}}%
+    \end{header}
+
+    \vspace{5 pt - 0.3 cm}
+
+     \section{Experience}
+
+
+
+        
+        \begin{twocolentry}{
+            Jan 2024 – Present
+        }
+            \textbf{Lead Software Engineer}, \href{https://codemypixel.com/}{Codemypixel} -- Remote\end{twocolentry}
+
+        \vspace{0.10 cm}
+        \begin{onecolentry}
+            \begin{highlights}
+                \item  With a committed small team, I cultivate active listening and bold goal-setting, harnessing AI to fast-track iteration and produce production-grade MVP software that drives real impact.
+                \item Seek opportunity to optimize engineering processes and culture. Believer in the Growth Mindset.
+                \item Developed projects through pair programming and managed complex SaaS and AI agent initiatives as a Project Manager, overseeing end-to-end planning and roadmap creation for cross-functional teams.
+                %\item Handle difficult or crucial people problems and find a resolution that is good for the company in the long run.
+                \item Managed client relationships \& communications with professionalism, consistently achieving successful results.
+                %\item Collaborated with the recruiting team to enhance every stage of the candidate experience, making it more effective and rewarding.
+
+            \end{highlights}
+        \end{onecolentry}
+
+
+        \vspace{0.2 cm}
+
+        \begin{twocolentry}{
+            Aug 2024 – Dec 2024
+        }
+            \textbf{Full-Stack Developer}, \href{https://www.uvoystore.com/}{Uvoy} -- Remote\end{twocolentry}
+
+        \vspace{0.10 cm}
+        \begin{onecolentry}
+            \begin{highlights}
+                \item Developed and maintained a Full-stack E-commerce platform.
+            \end{highlights}
+        \end{onecolentry}
+
+
+     \section{Technologies}
+                \begin{onecolentry}
+                    \textbf{Languages:} Python, Typescript, Node.js, PyTorch, Javascript, C, SQL, LaTeX
+                \end{onecolentry}
+            
+                \vspace{0.2 cm}
+            
+                \begin{onecolentry}
+                    \textbf{Technologies:} REST API, Github, Supabase, Next.js, Vercel, Firebase, noSQL, Telnyx, OpenAI, Stripe, Make, n8n, Twilio, Overleaf, Cursor, Claude, Microsoft Graph API, Firebase, MongoDB, Hugging Face, Docker, Canva
+                \end{onecolentry}
+    
+                \vspace{0.2 cm}
+            
+                \begin{onecolentry}
+                    \textbf{Expertise:} Machine Learning, Data Analysis, Vibe coding, Prompt Engineering, Model Context Protocol (MCP), Retrieval-Augmented Generation (RAG), AI Agent, Low Code
+                \end{onecolentry}
+    
+    
+
+
+    \section{Projects}
+
+
+        \begin{twocolentry}{
+            \href{https://codemypixel.com/top-floor-trends-case-study/}{More info}
+        }
+            \href{https://topfloortrends.com/}{\textbf{Topfloor Trends SAAS (UK)}}\end{twocolentry}
+
+        \vspace{0.10 cm}
+        \begin{onecolentry}
+            \begin{highlights}
+                \item Worked closely with the developer for an end-to-end SaaS platform for creators, automating content repurposing and multi-platform publishing. Owned product delivery, integrated Google Ads API to reduce campaign deployment to under 60 seconds, and built an AI pipeline with Vizard's API to automatically convert 180 minutes of footage into 20+ short reels with subtitles, effects, and one-click cross-posting.
+            \end{highlights}
+        \end{onecolentry}
+
+
+        \vspace{0.2 cm}
+
+        \begin{twocolentry}{
+            \href{https://leads-patser.vercel.app/}{Public CPQ Tool}
+        }
+            \href{https://leads-patser.vercel.app/}{\textbf{Devrachtpatser Onvyo ERP (EU)}}
+        \end{twocolentry}
+        
+
+        \vspace{0.10 cm}
+        \begin{onecolentry}
+            \begin{highlights}
+                \item Collaborated with the team to develop a ERP system from scratch with real-time admin dashboards for HR, finance, lead, and customer management, integrating scheduling, email reminders, and a CPQ tool that automated lead generation and quotations to boost sales efficiency, while I guided my team in understanding client needs and shaping an intuitive, high-performing experience.
+            \end{highlights}
+        \end{onecolentry}
+
+
+        \vspace{0.2 cm}
+
+        \begin{twocolentry}{
+            \href{https://codemypixel.com/textgpt-case-study/}{More Info}
+        }
+            \href{https://www.textg.pt/iqr}{\textbf{TextGPT \& IQR.code SMS (USA)}}\end{twocolentry}
+
+        \vspace{0.10 cm}
+        \begin{onecolentry}
+            \begin{highlights}
+                %\item Developed a SAAS app with Retrieval-Augmented Generation (RAG) dual B2B/B2C solution where businesses launch AI agents from a dashboard, allowing customers to get instant answers via SMS.
+                \item Developed a SaaS app powered by RAG and integrated Telnyx as the core SMS channel, enabling customers to instantly start conversations with product-specific AI agents by scanning a QR code, while businesses manage and launch these agents from a central dashboard for seamless B2B and B2C engagement.
+               % \item Led the Next.js/Node.js development of a robust SMS channel, successfully integrating Telnyx to allow customers to initiate conversations via SMS instantly from a QR code.
+               % \item Engineered a secure, cloud-native backend on Supabase, powering a core Retrieval-Augmented Generation (RAG) pipeline with pgvector for sub-second vector search and RLS for strict tenant isolation.
+               % \item Orchestrated the project from concept to production in 9 weeks, integrating a full suite of services for AI (Mistral + OpenAI), billing (Stripe), and messaging (Telnyx).
+            \end{highlights}
+        \end{onecolentry}
+
+
+        \vspace{0.2 cm}
+        
+    \begin{twocolentry}{
+            %\href{https://github.com/sinaatalay/rendercv}{github.com/name/repo}
+        }
+             \textbf{AI-Powered Lead Automation System (EU)}\end{twocolentry}
+
+        \vspace{0.10 cm}
+        \begin{onecolentry}
+            \begin{highlights}
+               % \item Built a low-code Agentic platform using Make that processes and responds to leads from email and WhatsApp, intelligently scheduling sales appointments for over 500 qualified leads per month.
+                
+                %\item Integrated AI agents with tools like Outlook Calendar, Twilio (WhatsApp), Google Maps (Distance Matrix), Spreadsheets, and Outlook Mail, orchestrated through prompt engineering to ensure efficient and effective tool utilization, enabling real-time event creation, route-based scheduling, and conversational quote generation with automated follow-ups that ultimately saved 2–3 hours of a salesperson’s time each day.
+                \item Designed  and developed a low-code system using Make, Twilio, and Google APIs to process leads from email and WhatsApp. The system intelligently schedules over 500 qualified sales appointments per month, saving sales staff 2-3 hours daily.
+                
+            \end{highlights}
+        \end{onecolentry}
+        
+    \vspace{0.2 cm}
+                
+    \begin{twocolentry}{
+            \href{https://github.com/sabbirahmed404/Brain_Tumor_Detection_Using_YOLO}{github.com/BTDUY}
+        }
+            \textbf{3D Deep Learning for Brain Lesion Detection with YOLO \& U-Net}\end{twocolentry}
+
+        \vspace{0.10 cm}
+        \begin{onecolentry}
+            \begin{highlights}
+               % \item Conducted research on 3D medical image segmentation using YOLO and U-Net architectures, focusing on multi-modal MRI and PET data for improved lesion detection accuracy.
+               % \item Preprocessed and annotated datasets, optimized model pipelines for volumetric input, and implemented training with PyTorch, achieving robust feature localization and enhanced diagnostic precision.
+               \item Researched 3D medical image segmentation using YOLO \& U-Net in PyTorch. Optimized data pipelines for multi-modal MRI and PET scans to improve lesion detection accuracy.
+            \end{highlights}
+        \end{onecolentry}
+
+
+
+        
+        \begin{twocolentry}{
+            \href{https://www.uvoystore.com/}{Live Link}
+        }
+         \vspace{0.2 cm}
+            \href{https://www.uvoystore.com/}{\textbf{Uvoy E-commerce platform (BD)}}\end{twocolentry}
+
+        \vspace{0.10 cm}
+        \begin{onecolentry}
+            \begin{highlights}
+                %\item Developed a premium Bangladeshi e-commerce platform for local fashion products, featuring smooth product browsing, fast order tracking, multi-channel payments, and customer support, built with a responsive UI and full-stack architecture including user/admin dashboards, authentication, relational database, and robust cart and order management systems to ensure reliability and scalability across all devices.
+
+                \item Developed a full-stack e-commerce platform for a local fashion brand, featuring user and admin dashboards, multi-channel payments, and scalable order management.
+            \end{highlights}
+
+        
+            
+        \end{onecolentry}
+
+     \section{Education}
+
+
+
+        
+        \begin{twocolentry}{
+            Feb 2022 – Feb 2026
+        }
+            \textbf{Green University of Bangladesh}, BS in Computer Science and Engineering\end{twocolentry}
+
+        %\vspace{0.10 cm}
+        \begin{onecolentry}
+            \begin{highlights}
+                %\item CGPA: 3.59/4.0
+                %\item \textbf{Coursework:} Computer Architecture, Comparison of Learning Algorithms, Computational Theory
+            \end{highlights}
+        \end{onecolentry}
+
+
+
+    
+ 
+
+    
+
+
+    
+    \section{Leadership and Volunteering Activities}
+
+    \begin{onecolentry}
+        \begin{highlightsforbulletentries}
+
+
+        \item \textbf{IEEE Student Branch GUB}, Executive Committee Member
+        \begin{highlightsforbulletentries}
+            \item Glad to be selected as IEEE Student Branch GUB chapter \textbf{Best Executive} of the Year
+            \item Organized, photographed, and designed for over 25 high-profile events within a single year as a core volunteer contributor.
+        \end{highlightsforbulletentries}
+
+        \item \textbf{Green University Photography Club}, General Secretary
+        \begin{highlightsforbulletentries}
+            \item My work has stretched from \textbf{organizing the committee} and serving as the key organizer of numerous creative events, including exhibitions, competitions, and workshops.
+        \end{highlightsforbulletentries}
+
+        \item \textbf{Participated in AI Agent Hackathons and Programming Competitions}
+        
+        \end{highlightsforbulletentries}
+    \end{onecolentry}
+
+
+    
+       
+        
+
+
+
+    %\section{Welcome to RenderCV!}
+
+
+
+        
+      %  \begin{onecolentry}
+        %    \href{https://rendercv.com}{RenderCV} is a LaTeX-based CV/resume version-control and maintenance app. It allows you to create a high-quality CV or resume as a PDF file from a YAML file, with \textbf{Markdown syntax support} and \textbf{complete control over the LaTeX code}.
+      %  \end{onecolentry}
+
+       % \vspace{0.2 cm}
+
+       % \begin{onecolentry}
+         %   The boilerplate content was inspired by \href{https://github.com/dnl-blkv/mcdowell-cv}{Gayle McDowell}.
+        %\end{onecolentry}
+
+        
+    \section{Certifications}
+
+
+
+        
+        \begin{samepage}
+            \begin{twocolentry}{
+                Feb 2024
+            }
+                \textbf{\href{https://www.coursera.org/account/accomplishments/specialization/E72WSQMVB35K}{Google Data Analytics Specialization}}
+            \end{twocolentry}
+
+            \vspace{0.10 cm}
+            
+            \begin{onecolentry}
+                \mbox{Coursera}, \mbox{\textbf{\textit{9 course series}}}, \mbox{by Google Career Certificates}
+
+                \vspace{0.10 cm}
+                
+        
+        \end{onecolentry}
+        \end{samepage}
+        
+        \vspace{0.2 cm}
+        
+         \begin{samepage}
+            \begin{twocolentry}{
+                Feb 2025
+            }
+                \textbf{\href{https://huggingface.co/datasets/agents-course/certificates/resolve/main/certificates/SabbirAhmed404/2025-02-20.png}{Hugging Face AI Agents Fundamentals}}
+            \end{twocolentry}
+
+            \vspace{0.10 cm}
+            
+        \end{samepage}
+
+               \vspace{0.2 cm}
+        
+         \begin{samepage}
+            \begin{twocolentry}{
+                Aug 2023
+            }
+                \textbf{\href{https://courses.cognitiveclass.ai/certificates/528cbee0ff0d45b3bd989ac9d6825980}{IBM PY0101EN: Python 101 for Data Science}}
+            \end{twocolentry}
+            
+        \end{samepage}
+
+    
+    
+
+
+   
+\end{document}
